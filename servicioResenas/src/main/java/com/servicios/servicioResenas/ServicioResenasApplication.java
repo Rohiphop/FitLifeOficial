@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ServicioResenasApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(ServicioResenasApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(ServicioResenasApplication.class, args);
+    }
 }
