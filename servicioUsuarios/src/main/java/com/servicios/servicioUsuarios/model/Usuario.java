@@ -1,32 +1,34 @@
 package com.servicios.servicioUsuarios.model;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import java.util.UUID;
 
 @Entity
-@Table(name = "usuarios")
 @Data
 public class Usuario {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @NotBlank
     private String nombre;
 
     @Email
-    @Column(unique = true)
+    @NotBlank
     private String correo;
 
     @NotBlank
-    private String contraseña;
+    @Size(min = 6)
+    private String contrasena;
 
     @NotBlank
-    private String rol; // ADMIN, CLIENTE, ENTRENADOR, etc.
-
-    public Usuario() {}
+    private String rol;
 }
