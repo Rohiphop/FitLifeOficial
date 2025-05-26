@@ -1,26 +1,24 @@
 package com.servicios.servicioAutenticacion.controller;
 
+
+import com.servicios.servicioAutenticacion.model.AuthRequest;
 import com.servicios.servicioAutenticacion.service.AuthService;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService service;
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        String token = authService.login(request.getCorreo(), request.getContraseña());
-        return token != null ? token : "Credenciales inválidas";
+    public AuthController(AuthService service) {
+        this.service = service;
     }
 
-    @Data
-    public static class LoginRequest {
-        private String correo;
-        private String contraseña;
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+        String respuesta = service.autenticar(request);
+        return ResponseEntity.ok(respuesta);
     }
 }

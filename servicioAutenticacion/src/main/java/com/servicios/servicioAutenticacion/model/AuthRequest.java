@@ -1,5 +1,10 @@
 package com.servicios.servicioAutenticacion.model;
 
-public class AuthRequest {
 
+import lombok.Data;
+
+@Data
+public class AuthRequest {
+    private String correo;
+    private String contrasena;
 }

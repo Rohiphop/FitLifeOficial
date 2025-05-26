@@ -1,28 +1,25 @@
 package com.servicios.servicioAutenticacion.service;
 
 
-import com.servicios.servicioAutenticacion.model.Usuario;
-import com.servicios.servicioAutenticacion.repository.UsuarioRepository;
-import com.servicios.servicioAutenticacion.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.servicios.servicioAutenticacion.model.AuthRequest;
+import com.servicios.servicioAutenticacion.repository.UsuarioRepository;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    @Autowired
-    private UsuarioRepository repo;
+    private final UsuarioRepository repository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthService(UsuarioRepository repository) {
+        this.repository = repository;
+    }
 
-    public String login(String correo, String contraseña) {
-        Optional<Usuario> user = repo.findByCorreo(correo);
-        if (user.isPresent() && user.get().getContraseña().equals(contraseña)) {
-            return jwtUtil.generateToken(correo);
-        }
-        return null;
+    public String autenticar(AuthRequest request) {
+        return repository.findByCorreo(request.getCorreo())
+                .filter(user -> user.getContrasena().equals(request.getContrasena()))
+                .map(user -> "TOKEN_" + user.getId()) // Simulación de token
+                .orElse("Credenciales incorrectas");
     }
 }

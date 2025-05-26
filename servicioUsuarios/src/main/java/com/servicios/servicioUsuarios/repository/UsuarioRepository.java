@@ -1,11 +1,12 @@
-package com.servicios.servicioUsuarios.repository;
+package com.fitlife.usuarios.repository;
 
-import com.servicios.servicioUsuarios.model.Usuario;
+import com.fitlife.usuarios.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByCorreo(String correo);
 }

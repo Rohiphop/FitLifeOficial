@@ -1,51 +1,52 @@
-package com.servicios.servicioUsuarios.controller;
+package com.fitlife.usuarios.controller;
 
-import com.servicios.servicioUsuarios.model.Usuario;
-import com.servicios.servicioUsuarios.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fitlife.usuarios.model.Usuario;
+import com.fitlife.usuarios.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService service;
+
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
 
     @GetMapping
-    public List<Usuario> obtenerTodos() {
-        return usuarioService.listarTodos();
+    public List<Usuario> listar() {
+        return service.listar();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerPorId(@PathVariable UUID id) {
-        return usuarioService.obtenerPorId(id)
+    public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
+        return service.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public Usuario crear(@RequestBody Usuario usuario) {
-        return usuarioService.crearUsuario(usuario);
+        return service.crear(usuario);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable UUID id, @RequestBody Usuario usuario) {
-        try {
-            return ResponseEntity.ok(usuarioService.actualizarUsuario(id, usuario));
-        } catch (RuntimeException e) {
+    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+        Usuario actualizado = service.actualizar(id, usuario);
+        if (actualizado != null) {
+            return ResponseEntity.ok(actualizado);
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
-        usuarioService.eliminarUsuario(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }
